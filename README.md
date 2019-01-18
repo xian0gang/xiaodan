@@ -7,6 +7,8 @@
 
 ![image](https://github.com/xian0gang/xiaodan/blob/master/image/pic.jpg)
 
+![image](https://github.com/xian0gang/xiaodan/blob/master/image/pic2.jpg)
+
 ## 编译、运行环境
 - windows7
 - qt5.2.1
