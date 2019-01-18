@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/fontawesome-webfont.ttf</file>
+        <file>image/logo.png</file>
+    </qresource>
+</RCC>
