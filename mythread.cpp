@@ -203,14 +203,16 @@ qDebug("解码线程进入");
                 float bili_h = (float)pic_h / (float)out_height;
 //                qDebug("w2`````````````````````````````:%f",bili_w);
 //                qDebug("h2`````````````````````````````:%f",bili_h);
-                if(bili_w <= bili_h)
-                {
-                    out_width = pic_w * out_height / pic_h;
-                }
-                else
-                {
-                    out_height = out_width * pic_h / out_height;
-                }
+
+//                暂时不按比例重新计算，会影响画框
+//                if(bili_w <= bili_h)
+//                {
+//                    out_width = pic_w * out_height / pic_h;
+//                }
+//                else
+//                {
+//                    out_height = out_width * pic_h / out_height;
+//                }
 
                 if(cappic)
                 {

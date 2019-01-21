@@ -55,12 +55,12 @@ int ShowLabel::TimeOut()
     this->setText("超时，请重试......");
 }
 
-//void ShowLabel::paintEvent(QPaintEvent *)
-//{
-//    QPainter painter(this);
+void ShowLabel::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
 
-//    // 反走样
-//    painter.setRenderHint(QPainter::Antialiasing, true);
+    // 反走样
+    painter.setRenderHint(QPainter::Antialiasing, true);
 
 //    if(nuu != 0)
 //    {
@@ -76,30 +76,30 @@ int ShowLabel::TimeOut()
 //    xxg = xgxg;
 
 
-////    QRect rect(0,0,this->width(),this->height());
+//    QRect rect(0,0,this->width(),this->height());
 
 
-////    if(pix.isNull())
-////    {
-////        painter.setPen(QColor(0, 160, 230));
-////        painter.drawText(rect(), QStringLiteral("udp://192.168.1.1"));
-////    }
-////    else
+//    if(pix.isNull())
 //    {
-//        // 绘制图标
-//        painter.drawPixmap(rect(), pix);
-
-//        painter.setPen(QPen(Qt::blue,4));//设置画笔形式
-//        if(src_x != 0)
-//        {
-//            if(num != 0)
-//            {
-//                painter.drawRect(src_x,src_y,dst_x - src_x,dst_y - src_y);//画矩形
-//                num--;
-//            }
-//        }
+//        painter.setPen(QColor(0, 160, 230));
+//        painter.drawText(rect(), QStringLiteral("udp://192.168.1.1"));
 //    }
-//}
+//    else
+    {
+        // 绘制图标
+        painter.drawPixmap(rect(), pix);
+
+        painter.setPen(QPen(Qt::blue,4));//设置画笔形式
+        if(src_x != 0)
+        {
+            if(num != 0)
+            {
+                painter.drawRect(src_x,src_y,dst_x - src_x,dst_y - src_y);//画矩形
+                num--;
+            }
+        }
+    }
+}
 
 void ShowLabel::mousePressEvent(QMouseEvent* event)
 {
@@ -268,7 +268,9 @@ void ShowLabel::mouseDoubleClickEvent(QMouseEvent *)
             this->clear();
             changesize(this->width(), this->height());
         }
-    }else{
+    }
+    else
+    {
         this->setWindowFlags(Qt::Window);
         this->showFullScreen();
         this->clear();

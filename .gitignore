@@ -1,0 +1,8 @@
+*.user
+*Makefile
+debug
+release
+video
+*.Debug
+*.Release
+*.h264

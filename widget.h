@@ -9,6 +9,19 @@
 #include <QTcpServer>
 #include <QMessageBox>
 
+typedef struct {
+    unsigned char head;
+    unsigned char target;
+    unsigned char head2;
+    unsigned char ctr;
+    short x1;
+    short y1;
+    short x2;
+    short y2;
+    unsigned char chk;
+    unsigned char end;
+}POINTDATA;
+
 
 namespace Ui {
 class Widget;
@@ -37,6 +50,7 @@ private slots:
     void th_quit();
     void NewConnect();
     void Tcpclose();
+    void sendPoint(int, int, int, int);
 //    菜单栏按钮
     void on_close_btn_clicked();
     void on_max_btn_clicked();
@@ -80,6 +94,16 @@ private slots:
 
     void on_save_btn_clicked();
 
+    void on_track_btn1_clicked();
+
+    void on_track_btn2_clicked();
+
+    void on_track_btn3_clicked();
+
+    void on_pushButton_6_clicked();
+
+    void on_pushButton_7_clicked();
+
 private:
     Ui::Widget *ui;
     void ui_init();      //ui初始化
@@ -117,6 +141,8 @@ private:
 
     int savefile;
     bool saveff;
+
+    POINTDATA POT;
 
 };
 

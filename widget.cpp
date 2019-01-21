@@ -30,6 +30,8 @@ Widget::Widget(QWidget *parent) :
 
     label_w = ui->label_play->width();
     label_h = ui->label_play->height();
+    qDebug()<<label_w;
+    qDebug()<<label_h;
 
     ui->label_play->changesize(label_w, label_h);
 
@@ -48,9 +50,9 @@ Widget::Widget(QWidget *parent) :
     TcpInit();
     connect(ui->label_play,SIGNAL(thread_quit()),this, SLOT(th_quit()));
 
+    connect(ui->label_play, SIGNAL(Point(int,int,int,int)), this, SLOT(sendPoint(int,int,int,int)));
+
 }
-
-
 
 void Widget::TcpInit()
 {
@@ -910,4 +912,155 @@ void Widget::on_save_btn_clicked()
         saveff = true;
     }
 
+}
+
+void Widget::sendPoint(int x1, int y1, int x2, int y2)
+{
+    unsigned char data[100] = { 0 };
+
+    POT.head = 0x68;
+    POT.target = 0x01;
+    POT.head2 = 0x68;
+    POT.ctr = 0x01;
+    POT.x1 = x1;
+    POT.y1 = y1;
+    POT.x2 = x2;
+    POT.y2 = y2;
+    POT.chk = (x1 + y1 + x2 + y2) % 255;
+    POT.end = 0x16;
+    int len = sizeof(POINTDATA);
+    memcpy(/*(void*)*/data, &POT, len);
+
+    int ret = socket->write((const char*)data,14);
+
+    if(ret < 0)
+    {
+        qDebug()<<"send fail!!!";
+    }
+}
+
+
+void Widget::on_track_btn1_clicked()
+{
+    unsigned char data[100] = { 0 };
+
+    POT.head = 0x68;
+    POT.target = 0x01;
+    POT.head2 = 0x68;
+    POT.ctr = 0x02;
+    POT.x1 = 0;
+    POT.y1 = 0;
+    POT.x2 = 0;
+    POT.y2 = 0;
+    POT.chk = 0;
+    POT.end = 0x16;
+    int len = sizeof(POINTDATA);
+    memcpy(/*(void*)*/data, &POT, len);
+
+    int ret = socket->write((const char*)data,14);
+
+    if(ret < 0)
+    {
+        qDebug()<<"send fail!!!";
+    }
+}
+
+void Widget::on_track_btn2_clicked()
+{
+    unsigned char data[100] = { 0 };
+
+    POT.head = 0x68;
+    POT.target = 0x01;
+    POT.head2 = 0x68;
+    POT.ctr = 0x03;
+    POT.x1 = 0;
+    POT.y1 = 0;
+    POT.x2 = 0;
+    POT.y2 = 0;
+    POT.chk = 0;
+    POT.end = 0x16;
+    int len = sizeof(POINTDATA);
+    memcpy(/*(void*)*/data, &POT, len);
+
+    int ret = socket->write((const char*)data,14);
+
+    if(ret < 0)
+    {
+        qDebug()<<"send fail!!!";
+    }
+}
+
+void Widget::on_track_btn3_clicked()
+{
+    unsigned char data[100] = { 0 };
+
+    POT.head = 0x68;
+    POT.target = 0x01;
+    POT.head2 = 0x68;
+    POT.ctr = 0x04;
+    POT.x1 = 0;
+    POT.y1 = 0;
+    POT.x2 = 0;
+    POT.y2 = 0;
+    POT.chk = 0;
+    POT.end = 0x16;
+    int len = sizeof(POINTDATA);
+    memcpy(/*(void*)*/data, &POT, len);
+
+    int ret = socket->write((const char*)data,14);
+
+    if(ret < 0)
+    {
+        qDebug()<<"send fail!!!";
+    }
+}
+
+void Widget::on_pushButton_6_clicked()
+{
+    unsigned char data[100] = { 0 };
+
+    POT.head = 0x68;
+    POT.target = 0x01;
+    POT.head2 = 0x68;
+    POT.ctr = 0x05;
+    POT.x1 = 0;
+    POT.y1 = 0;
+    POT.x2 = 0;
+    POT.y2 = 0;
+    POT.chk = 0;
+    POT.end = 0x16;
+    int len = sizeof(POINTDATA);
+    memcpy(/*(void*)*/data, &POT, len);
+
+    int ret = socket->write((const char*)data,14);
+
+    if(ret < 0)
+    {
+        qDebug()<<"send fail!!!";
+    }
+}
+
+void Widget::on_pushButton_7_clicked()
+{
+    unsigned char data[100] = { 0 };
+
+    POT.head = 0x68;
+    POT.target = 0x01;
+    POT.head2 = 0x68;
+    POT.ctr = 0x06;
+    POT.x1 = 0;
+    POT.y1 = 0;
+    POT.x2 = 0;
+    POT.y2 = 0;
+    POT.chk = 0;
+    POT.end = 0x16;
+    int len = sizeof(POINTDATA);
+    memcpy(/*(void*)*/data, &POT, len);
+
+    int ret = socket->write((const char*)data,14);
+
+    if(ret < 0)
+    {
+        qDebug()<<"send fail!!!";
+    }
 }

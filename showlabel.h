@@ -25,7 +25,7 @@ protected:
      void mouseDoubleClickEvent(QMouseEvent *);
      void mouseMoveEvent(QMouseEvent *event);
      void mouseReleaseEvent(QMouseEvent *event);
-//     void paintEvent(QPaintEvent *);
+     void paintEvent(QPaintEvent *);
 
 signals:
     void clicked();

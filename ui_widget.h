@@ -80,6 +80,12 @@ public:
     QPushButton *suoding_btn;
     QPushButton *left_btn_2;
     QPushButton *up_btn;
+    QVBoxLayout *verticalLayout_4;
+    QPushButton *track_btn1;
+    QPushButton *track_btn2;
+    QPushButton *track_btn3;
+    QPushButton *pushButton_6;
+    QPushButton *pushButton_7;
     QGroupBox *groupBox_3;
     QGridLayout *gridLayout_10;
     QCheckBox *checkBox;
@@ -159,7 +165,7 @@ public:
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName(QStringLiteral("Widget"));
-        Widget->resize(1197, 895);
+        Widget->resize(923, 697);
         gridLayout = new QGridLayout(Widget);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
@@ -308,7 +314,7 @@ public:
         verticalLayout_5->setContentsMargins(4, 4, -1, -1);
         label_play = new ShowLabel(page);
         label_play->setObjectName(QStringLiteral("label_play"));
-        label_play->setMinimumSize(QSize(800, 450));
+        label_play->setMinimumSize(QSize(720, 576));
         label_play->setStyleSheet(QStringLiteral("border-color: rgb(255, 255, 255);"));
         label_play->setAlignment(Qt::AlignCenter);
 
@@ -415,6 +421,37 @@ public:
 
         verticalLayout_3->addLayout(gridLayout_2);
 
+        verticalLayout_4 = new QVBoxLayout();
+        verticalLayout_4->setSpacing(6);
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
+        track_btn1 = new QPushButton(page);
+        track_btn1->setObjectName(QStringLiteral("track_btn1"));
+
+        verticalLayout_4->addWidget(track_btn1);
+
+        track_btn2 = new QPushButton(page);
+        track_btn2->setObjectName(QStringLiteral("track_btn2"));
+
+        verticalLayout_4->addWidget(track_btn2);
+
+        track_btn3 = new QPushButton(page);
+        track_btn3->setObjectName(QStringLiteral("track_btn3"));
+
+        verticalLayout_4->addWidget(track_btn3);
+
+        pushButton_6 = new QPushButton(page);
+        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
+
+        verticalLayout_4->addWidget(pushButton_6);
+
+        pushButton_7 = new QPushButton(page);
+        pushButton_7->setObjectName(QStringLiteral("pushButton_7"));
+
+        verticalLayout_4->addWidget(pushButton_7);
+
+
+        verticalLayout_3->addLayout(verticalLayout_4);
+
         groupBox_3 = new QGroupBox(page);
         groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
         gridLayout_10 = new QGridLayout(groupBox_3);
@@ -485,7 +522,7 @@ public:
 
         verticalLayout_3->setStretch(0, 1);
         verticalLayout_3->setStretch(2, 6);
-        verticalLayout_3->setStretch(6, 4);
+        verticalLayout_3->setStretch(7, 4);
 
         gridLayout_8->addLayout(verticalLayout_3, 0, 1, 1, 1);
 
@@ -573,16 +610,6 @@ public:
 
         gridLayout_7->addWidget(pushButton_2, 2, 0, 1, 2);
 
-        pushButton_2->raise();
-        label_2->raise();
-        win_width->raise();
-        label_3->raise();
-        win_height->raise();
-        label_2->raise();
-        win_height->raise();
-        label_3->raise();
-        win_width->raise();
-        pushButton_2->raise();
 
         gridLayout_16->addWidget(groupBox_5, 0, 0, 1, 1);
 
@@ -856,6 +883,11 @@ public:
         suoding_btn->setText(QApplication::translate("Widget", "\351\224\201\345\256\232", 0));
         left_btn_2->setText(QApplication::translate("Widget", "left", 0));
         up_btn->setText(QApplication::translate("Widget", "up", 0));
+        track_btn1->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2251", 0));
+        track_btn2->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2252", 0));
+        track_btn3->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2253", 0));
+        pushButton_6->setText(QApplication::translate("Widget", "\345\217\257\350\247\201\345\205\211", 0));
+        pushButton_7->setText(QApplication::translate("Widget", "\347\272\242\345\244\226", 0));
         groupBox_3->setTitle(QApplication::translate("Widget", "\346\255\245\351\225\277", 0));
         checkBox->setText(QApplication::translate("Widget", "1", 0));
         checkBox_2->setText(QApplication::translate("Widget", "5", 0));

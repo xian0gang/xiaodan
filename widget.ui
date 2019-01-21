@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1197</width>
-    <height>895</height>
+    <width>923</width>
+    <height>697</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -348,8 +348,8 @@
               <widget class="ShowLabel" name="label_play">
                <property name="minimumSize">
                 <size>
-                 <width>800</width>
-                 <height>450</height>
+                 <width>720</width>
+                 <height>576</height>
                 </size>
                </property>
                <property name="styleSheet">
@@ -459,7 +459,7 @@
             </layout>
            </item>
            <item row="0" column="1">
-            <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,0,6,0,0,0,4">
+            <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,0,6,0,0,0,0,4">
              <item>
               <widget class="QLabel" name="state_lab">
                <property name="maximumSize">
@@ -580,6 +580,45 @@
                  </property>
                  <property name="text">
                   <string>up</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QPushButton" name="track_btn1">
+                 <property name="text">
+                  <string>跟踪算法1</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="track_btn2">
+                 <property name="text">
+                  <string>跟踪算法2</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="track_btn3">
+                 <property name="text">
+                  <string>跟踪算法3</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_6">
+                 <property name="text">
+                  <string>可见光</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_7">
+                 <property name="text">
+                  <string>红外</string>
                  </property>
                 </widget>
                </item>
@@ -765,16 +804,6 @@
                 </widget>
                </item>
               </layout>
-              <zorder>pushButton_2</zorder>
-              <zorder>label_2</zorder>
-              <zorder>win_width</zorder>
-              <zorder>label_3</zorder>
-              <zorder>win_height</zorder>
-              <zorder>label_2</zorder>
-              <zorder>win_height</zorder>
-              <zorder>label_3</zorder>
-              <zorder>win_width</zorder>
-              <zorder>pushButton_2</zorder>
              </widget>
             </item>
             <item row="0" column="1" rowspan="2">
