@@ -194,8 +194,8 @@ qDebug("解码线程进入");
 
 //                qDebug("w`````````````````````````````:%d",out_width );
 //                qDebug("h`````````````````````````````:%d",out_height );
-                int pic_w = pFormatCtx->streams[0]->codec->width;
-                int pic_h = pFormatCtx->streams[0]->codec->height;
+                int pic_w = pFormatCtx->streams[videoindex]->codec->width;
+                int pic_h = pFormatCtx->streams[videoindex]->codec->height;
 //                qDebug("w1`````````````````````````````:%d",pic_w );
 //                qDebug("h1`````````````````````````````:%d",pic_h );
 
@@ -227,8 +227,8 @@ qDebug("解码线程进入");
                 out_buffer = (uint8_t *) av_malloc(avpicture_get_size(AV_PIX_FMT_RGB32, out_width, out_height));
                 avpicture_fill( (AVPicture *) pFrameRGB, out_buffer, AV_PIX_FMT_RGB32, out_width, out_height);
 
-                img_convert_ctx = sws_getContext(pFormatCtx->streams[0]->codec->width/*576*/,
-                                                 pFormatCtx->streams[0]->codec->height/*720*/,
+                img_convert_ctx = sws_getContext(pFormatCtx->streams[videoindex]->codec->width/*576*/,
+                                                 pFormatCtx->streams[videoindex]->codec->height/*720*/,
                                                  pCodecCtx->pix_fmt,
                                                  out_width,
                                                  out_height,
@@ -236,8 +236,8 @@ qDebug("解码线程进入");
                                                  SWS_BICUBIC,
                                                  NULL, NULL, NULL);
 
-                pal_img_convert_ctx = sws_getContext(pFormatCtx->streams[0]->codec->width/*576*/,
-                                                 pFormatCtx->streams[0]->codec->height/*720*/,
+                pal_img_convert_ctx = sws_getContext(pFormatCtx->streams[videoindex]->codec->width/*576*/,
+                                                 pFormatCtx->streams[videoindex]->codec->height/*720*/,
                                                  pCodecCtx->pix_fmt,
                                                  out_width,
                                                  out_height,
@@ -248,18 +248,24 @@ qDebug("解码线程进入");
                 qDebug("```````````````````````````````````");
             }
 
-            now_w = pFormatCtx->streams[0]->codec->width;
-//            qDebug()<<"wwwwwwwww:"<<now_w;
+            now_w = pFormatCtx->streams[videoindex]->codec->width;
+            qDebug()<<"wwwwwwwww:"<<now_w;
 //            qDebug()<<"hhhhhhhhh:"<<pFormatCtx->streams[0]->codec->height;
 
             //画框判断分辨率标志
-            if(now_w == 1920)
+            switch (now_w)
             {
-                xgxg = 1;
-            }
-            else
-            {
-                xgxg = 0;
+                case 1920:
+                    xgxg = 1;
+                    break;
+                case 720:
+                    xgxg = 0;
+                    break;
+                case 960:
+                    xgxg = 2;
+                    break;
+                default:
+                    break;
             }
 
             //延迟几帧

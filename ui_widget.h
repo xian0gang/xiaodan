@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -156,7 +157,13 @@ public:
     QLineEdit *fern_bit_num;
     QLineEdit *fern_num;
     QPushButton *pushButton_4;
-    QSpacerItem *verticalSpacer_2;
+    QGroupBox *groupBox_10;
+    QHBoxLayout *horizontalLayout_10;
+    QHBoxLayout *horizontalLayout_8;
+    QLabel *label_17;
+    QSpacerItem *horizontalSpacer_5;
+    QComboBox *comboBox;
+    QPushButton *pushButton_8;
     QWidget *page_3;
     QGridLayout *gridLayout_3;
     QTextBrowser *textBrowser;
@@ -815,9 +822,43 @@ public:
 
         gridLayout_5->addWidget(groupBox_2, 1, 0, 1, 1);
 
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        groupBox_10 = new QGroupBox(page_set);
+        groupBox_10->setObjectName(QStringLiteral("groupBox_10"));
+        horizontalLayout_10 = new QHBoxLayout(groupBox_10);
+        horizontalLayout_10->setSpacing(6);
+        horizontalLayout_10->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
+        horizontalLayout_8 = new QHBoxLayout();
+        horizontalLayout_8->setSpacing(6);
+        horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
+        label_17 = new QLabel(groupBox_10);
+        label_17->setObjectName(QStringLiteral("label_17"));
 
-        gridLayout_5->addItem(verticalSpacer_2, 2, 0, 1, 1);
+        horizontalLayout_8->addWidget(label_17);
+
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_8->addItem(horizontalSpacer_5);
+
+        comboBox = new QComboBox(groupBox_10);
+        comboBox->setObjectName(QStringLiteral("comboBox"));
+
+        horizontalLayout_8->addWidget(comboBox);
+
+        pushButton_8 = new QPushButton(groupBox_10);
+        pushButton_8->setObjectName(QStringLiteral("pushButton_8"));
+
+        horizontalLayout_8->addWidget(pushButton_8);
+
+        horizontalLayout_8->setStretch(0, 1);
+        horizontalLayout_8->setStretch(1, 2);
+        horizontalLayout_8->setStretch(2, 3);
+        horizontalLayout_8->setStretch(3, 3);
+
+        horizontalLayout_10->addLayout(horizontalLayout_8);
+
+
+        gridLayout_5->addWidget(groupBox_10, 2, 0, 1, 1);
 
         stackedWidget->addWidget(page_set);
         page_3 = new QWidget();
@@ -927,6 +968,9 @@ public:
         label_8->setText(QApplication::translate("Widget", "fern_num", 0));
         label_9->setText(QApplication::translate("Widget", "fern_bit_num", 0));
         pushButton_4->setText(QApplication::translate("Widget", "\350\256\276\347\275\256", 0));
+        groupBox_10->setTitle(QString());
+        label_17->setText(QApplication::translate("Widget", "\344\270\262\345\217\243\347\253\257\345\217\243\345\217\267", 0));
+        pushButton_8->setText(QApplication::translate("Widget", "\346\211\223\345\274\200\344\270\262\345\217\243", 0));
         textBrowser->setHtml(QApplication::translate("Widget", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

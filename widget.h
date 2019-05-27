@@ -104,6 +104,14 @@ private slots:
 
     void on_pushButton_7_clicked();
 
+    void handleSerialError(QSerialPort::SerialPortError error);
+
+    void handleTimeout();  //超时处理函数
+
+    void handleTimeout2();  //超时处理函数
+
+    void on_pushButton_8_clicked();
+
 private:
     Ui::Widget *ui;
     void ui_init();      //ui初始化
@@ -143,6 +151,9 @@ private:
     bool saveff;
 
     POINTDATA POT;
+
+    QTimer *m_pTimer;
+    QTimer *m_pTimer2;
 
 };
 

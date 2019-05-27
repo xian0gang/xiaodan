@@ -18,12 +18,19 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     mode = 1;       //默认不全屏
     play_stop = true;
     Suodin = true;
     StepSize = 5;
     saveff = true;
 
+
+
+    m_pTimer = new QTimer(this);
+    connect(m_pTimer, SIGNAL(timeout()), this, SLOT(handleTimeout()));
+    m_pTimer2 = new QTimer(this);
+    connect(m_pTimer2, SIGNAL(timeout()), this, SLOT(handleTimeout2()));
     ui->checkBox_2->setChecked(true);
     ui->checkBox_3->setChecked(false);
     ui->checkBox->setChecked(false);
@@ -38,6 +45,7 @@ Widget::Widget(QWidget *parent) :
 //    界面初始化
     ui_init();
 
+
 //    视频保存路径 没有就新建
     QDir dir("./video/");
     if(!dir.exists())
@@ -51,6 +59,30 @@ Widget::Widget(QWidget *parent) :
     connect(ui->label_play,SIGNAL(thread_quit()),this, SLOT(th_quit()));
 
     connect(ui->label_play, SIGNAL(Point(int,int,int,int)), this, SLOT(sendPoint(int,int,int,int)));
+
+
+    //读取串口信息
+        foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
+        {
+            qDebug()<<"Name:"<<info.portName();
+            qDebug()<<"Description:"<<info.description();
+            qDebug()<<"Manufacturer:"<<info.manufacturer();
+
+            //这里相当于自动识别串口号之后添加到了cmb，如果要手动选择可以用下面列表的方式添加进去
+            QSerialPort serial;
+            serial.setPort(info);
+            if(serial.open(QIODevice::ReadWrite))
+            {
+
+                //将串口号添加到cmb
+                ui->comboBox->addItem(info.portName());
+                //关闭串口等待人为(打开串口按钮)打开
+                serial.close();
+            }
+        }
+
+        on_pushButton_8_clicked();
+//        ui->track_btn2->setEnabled(false);
 
 }
 
@@ -93,17 +125,66 @@ void Widget::socket_Read_Data()
 }
 
 //串口 暂时没用
+//void Widget::UartInit()
+//{
+//    serial = new QSerialPort;
+//    serial->setPortName("\\\\.\\com24");
+//    bool open_flag=serial->open(QIODevice::ReadWrite);
+//        if(!open_flag)
+//        {
+//             qDebug()<<"串口连接失败！";
+//            return;
+//        }
+//    serial->setBaudRate(QSerialPort::Baud9600);//设置波特率为115200
+//    serial->setDataBits(QSerialPort::Data8);//设置数据位8
+//    serial->setParity(QSerialPort::NoParity); //校验位设置为0
+//    serial->setStopBits(QSerialPort::OneStop);//停止位设置为1
+//    serial->setFlowControl(QSerialPort::NoFlowControl);//设置为无流控制
+//    connect(serial,SIGNAL(readyRead()),this,SLOT(UartReadData()));
+//}
+
 void Widget::UartInit()
 {
     serial = new QSerialPort;
-    serial->setPortName("com5");
-    serial->open(QIODevice::ReadWrite);
+    connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+                this, &Widget::handleSerialError);    //连接槽，串口出现问题连接到错误处理函数
+//    QString uartPort = ui->uart_lineEdit->text();
+    serial->setPortName(ui->comboBox->currentText() );
+    bool open_flag;
     serial->setBaudRate(QSerialPort::Baud115200);//设置波特率为115200
     serial->setDataBits(QSerialPort::Data8);//设置数据位8
     serial->setParity(QSerialPort::NoParity); //校验位设置为0
     serial->setStopBits(QSerialPort::OneStop);//停止位设置为1
     serial->setFlowControl(QSerialPort::NoFlowControl);//设置为无流控制
-    connect(serial,SIGNAL(readyRead()),this,SLOT(UartReadData()));
+    open_flag = serial->open(QIODevice::ReadWrite);
+    if(!open_flag)
+    {
+         qDebug()<<"串口连接失败！";
+        return;
+    }
+    else
+    {
+        serial->setBaudRate(QSerialPort::Baud115200);//设置波特率为115200
+        serial->setDataBits(QSerialPort::Data8);//设置数据位8
+        serial->setParity(QSerialPort::NoParity); //校验位设置为0
+        serial->setStopBits(QSerialPort::OneStop);//停止位设置为1
+        serial->setFlowControl(QSerialPort::NoFlowControl);//设置为无流控制
+        qDebug()<<"串口连接！";
+        connect(serial, SIGNAL(readyRead()), this, SLOT(UartReadData()));
+    }
+}
+
+void Widget::handleSerialError(QSerialPort::SerialPortError error)
+{
+    if (error == QSerialPort::ResourceError) {
+
+        qDebug()<<"串口连接中断，请检查是否正确连接！";
+
+    if (serial->isOpen())
+        {
+            serial->close();
+        }
+    }
 }
 
 void Widget::UartReadData()
@@ -1032,12 +1113,85 @@ void Widget::on_pushButton_6_clicked()
     int len = sizeof(POINTDATA);
     memcpy(/*(void*)*/data, &POT, len);
 
-    int ret = socket->write((const char*)data,14);
+    int ret2 = socket->write((const char*)data,14);
 
-    if(ret < 0)
+    if(ret2 < 0)
     {
         qDebug()<<"send fail!!!";
     }
+    QByteArray ACK0;
+    ACK0[0] = 0xEB;
+    ACK0[1] = 0x90;
+    ACK0[2] = 0x01;
+    ACK0[3] = 0x02;
+    ACK0[4] = 0x00;
+    ACK0[5] = 0x00;
+    ACK0[6] = 0xFF;
+    ACK0[7] = 0xBF;
+    ACK0[8] = 0x00;
+    ACK0[9] = 0x00;
+    ACK0[10] = 0x00;
+    ACK0[11] = 0x00;
+    ACK0[12] = 0x00;
+    ACK0[13] = 0x00;
+    ACK0[14] = 0x00;
+    ACK0[15] = 0x00;
+    ACK0[16] = 0x00;
+    ACK0[17] = 0x00;
+    ACK0[18] = 0x00;
+    ACK0[19] = 0x00;
+    ACK0[20] = 0x00;
+    ACK0[21] = 0x00;
+    ACK0[22] = 0x00;
+    ACK0[23] = 0x00;
+    ACK0[24] = 0x00;
+    ACK0[25] = 0x00;
+    ACK0[26] = 0x00;
+    ACK0[27] = 0x00;
+    ACK0[28] = 0x00;
+    ACK0[29] = 0x00;
+    ACK0[30] = 0x00;
+    ACK0[31] = 0x00;
+    ACK0[32] = 0x00;
+    ACK0[33] = 0x00;
+    ACK0[34] = 0x00;
+    ACK0[35] = 0x00;
+    ACK0[36] = 0x00;
+    ACK0[37] = 0x00;
+    ACK0[38] = 0x00;
+    ACK0[39] = 0x00;
+    ACK0[40] = 0x00;
+    ACK0[41] = 0x00;
+    ACK0[42] = 0x00;
+    ACK0[43] = 0x00;
+    ACK0[44] = 0x00;
+    ACK0[45] = 0x00;
+    ACK0[46] = 0x00;
+    ACK0[47] = 0x00;
+    ACK0[48] = 0x00;
+    ACK0[49] = 0x00;
+    ACK0[50] = 0x00;
+    ACK0[51] = 0x00;
+    ACK0[52] = 0x00;
+    ACK0[53] = 0x00;
+    ACK0[54] = 0x00;
+    ACK0[15] = 0x00;
+    ACK0[56] = 0x00;
+    ACK0[57] = 0x00;
+    ACK0[58] = 0x00;
+    ACK0[59] = 0x00;
+    ACK0[60] = 0x00;
+    ACK0[61] = 0x00;
+    ACK0[62] = 0x00;
+    ACK0[63]= 0x3C;
+    int ret =serial->write(ACK0);
+    if(ret < 0)
+        {
+            qDebug()<<"send fail!!!";
+        }
+    m_pTimer->start(2000);
+    ui->track_btn2->setEnabled(false);
+
 }
 
 void Widget::on_pushButton_7_clicked()
@@ -1062,5 +1216,257 @@ void Widget::on_pushButton_7_clicked()
     if(ret < 0)
     {
         qDebug()<<"send fail!!!";
+    }
+
+    QByteArray ACK0;
+    ACK0[0] = 0xEB;
+    ACK0[1] = 0x90;
+    ACK0[2] = 0x01;
+    ACK0[3] = 0x02;
+    ACK0[4] = 0x00;
+    ACK0[5] = 0x00;
+    ACK0[6] = 0xFF;
+    ACK0[7] = 0xBF;
+    ACK0[8] = 0x00;
+    ACK0[9] = 0x00;
+    ACK0[10] = 0x00;
+    ACK0[11] = 0x00;
+    ACK0[12] = 0x00;
+    ACK0[13] = 0x00;
+    ACK0[14] = 0x00;
+    ACK0[15] = 0x00;
+    ACK0[16] = 0x00;
+    ACK0[17] = 0x00;
+    ACK0[18] = 0x00;
+    ACK0[19] = 0x00;
+    ACK0[20] = 0x00;
+    ACK0[21] = 0x00;
+    ACK0[22] = 0x00;
+    ACK0[23] = 0x00;
+    ACK0[24] = 0x00;
+    ACK0[25] = 0x00;
+    ACK0[26] = 0x00;
+    ACK0[27] = 0x00;
+    ACK0[28] = 0x00;
+    ACK0[29] = 0x00;
+    ACK0[30] = 0x00;
+    ACK0[31] = 0x00;
+    ACK0[32] = 0x00;
+    ACK0[33] = 0x00;
+    ACK0[34] = 0x00;
+    ACK0[35] = 0x00;
+    ACK0[36] = 0x00;
+    ACK0[37] = 0x00;
+    ACK0[38] = 0x00;
+    ACK0[39] = 0x00;
+    ACK0[40] = 0x00;
+    ACK0[41] = 0x00;
+    ACK0[42] = 0x00;
+    ACK0[43] = 0x00;
+    ACK0[44] = 0x00;
+    ACK0[45] = 0x00;
+    ACK0[46] = 0x00;
+    ACK0[47] = 0x00;
+    ACK0[48] = 0x00;
+    ACK0[49] = 0x00;
+    ACK0[50] = 0x00;
+    ACK0[51] = 0x00;
+    ACK0[52] = 0x00;
+    ACK0[53] = 0x00;
+    ACK0[54] = 0x00;
+    ACK0[15] = 0x00;
+    ACK0[56] = 0x00;
+    ACK0[57] = 0x00;
+    ACK0[58] = 0x00;
+    ACK0[59] = 0x00;
+    ACK0[60] = 0x00;
+    ACK0[61] = 0x00;
+    ACK0[62] = 0x00;
+    ACK0[63]= 0x3C;
+    serial->write(ACK0);
+    m_pTimer2->start(2000);
+     ui->track_btn2->setEnabled(true);
+}
+
+
+void Widget::handleTimeout()
+{
+    QByteArray ACK0;
+    ACK0[0] = 0xEB;
+    ACK0[1] = 0x90;
+    ACK0[2] = 0x06;
+    ACK0[3] = 0x01;
+    ACK0[4] = 0x00;
+    ACK0[5] = 0x00;
+    ACK0[6] = 0xFF;
+    ACK0[7] = 0xBF;
+    ACK0[8] = 0x00;
+    ACK0[9] = 0x00;
+    ACK0[10] = 0x00;
+    ACK0[11] = 0x00;
+    ACK0[12] = 0x00;
+    ACK0[13] = 0x00;
+    ACK0[14] = 0x00;
+    ACK0[15] = 0x00;
+    ACK0[16] = 0x00;
+    ACK0[17] = 0x00;
+    ACK0[18] = 0x00;
+    ACK0[19] = 0x00;
+    ACK0[20] = 0x00;
+    ACK0[21] = 0x00;
+    ACK0[22] = 0x00;
+    ACK0[23] = 0x00;
+    ACK0[24] = 0x00;
+    ACK0[25] = 0x00;
+    ACK0[26] = 0x00;
+    ACK0[27] = 0x00;
+    ACK0[28] = 0x00;
+    ACK0[29] = 0x00;
+    ACK0[30] = 0x00;
+    ACK0[31] = 0x00;
+    ACK0[32] = 0x00;
+    ACK0[33] = 0x00;
+    ACK0[34] = 0x00;
+    ACK0[35] = 0x00;
+    ACK0[36] = 0x00;
+    ACK0[37] = 0x00;
+    ACK0[38] = 0x00;
+    ACK0[39] = 0x00;
+    ACK0[40] = 0x00;
+    ACK0[41] = 0x00;
+    ACK0[42] = 0x00;
+    ACK0[43] = 0x00;
+    ACK0[44] = 0x00;
+    ACK0[45] = 0x00;
+    ACK0[46] = 0x00;
+    ACK0[47] = 0x00;
+    ACK0[48] = 0x00;
+    ACK0[49] = 0x00;
+    ACK0[50] = 0x00;
+    ACK0[51] = 0x00;
+    ACK0[52] = 0x00;
+    ACK0[53] = 0x00;
+    ACK0[54] = 0x00;
+    ACK0[15] = 0x00;
+    ACK0[56] = 0x00;
+    ACK0[57] = 0x00;
+    ACK0[58] = 0x00;
+    ACK0[59] = 0x00;
+    ACK0[60] = 0x00;
+    ACK0[61] = 0x00;
+    ACK0[62] = 0x00;
+    ACK0[63]= 0x40;
+
+    int ret1=serial->write(ACK0);
+    if(ret1 < 0)
+        {
+            qDebug()<<"send fail!!!";
+        }
+    else
+    qDebug()<<"串口发送成功";
+    m_pTimer->stop();
+
+    int w = ui->label_play->width();
+    int h = ui->label_play->height();
+//    qDebug("mode 1 label_w:%d", w);
+//    qDebug("mode 1 label_d:%d", h);
+    ui->label_play->changesize(w, h);
+}
+
+void Widget::handleTimeout2()
+{
+    QByteArray ACK;
+    ACK[0] = 0xEB;
+    ACK[1] = 0x90;
+    ACK[2] = 0x06;
+    ACK[3] = 0x02;
+    ACK[4] = 0x00;
+    ACK[5] = 0x00;
+    ACK[6] = 0xFF;
+    ACK[7] = 0xBF;
+    ACK[8] = 0x00;
+    ACK[9] = 0x00;
+    ACK[10] = 0x00;
+    ACK[11] = 0x00;
+    ACK[12] = 0x00;
+    ACK[13] = 0x00;
+    ACK[14] = 0x00;
+    ACK[15] = 0x00;
+    ACK[16] = 0x00;
+    ACK[17] = 0x00;
+    ACK[18] = 0x00;
+    ACK[19] = 0x00;
+    ACK[20] = 0x00;
+    ACK[21] = 0x00;
+    ACK[22] = 0x00;
+    ACK[23] = 0x00;
+    ACK[24] = 0x00;
+    ACK[25] = 0x00;
+    ACK[26] = 0x00;
+    ACK[27] = 0x00;
+    ACK[28] = 0x00;
+    ACK[29] = 0x00;
+    ACK[30] = 0x00;
+    ACK[31] = 0x00;
+    ACK[32] = 0x00;
+    ACK[33] = 0x00;
+    ACK[34] = 0x00;
+    ACK[35] = 0x00;
+    ACK[36] = 0x00;
+    ACK[37] = 0x00;
+    ACK[38] = 0x00;
+    ACK[39] = 0x00;
+    ACK[40] = 0x00;
+    ACK[41] = 0x00;
+    ACK[42] = 0x00;
+    ACK[43] = 0x00;
+    ACK[44] = 0x00;
+    ACK[45] = 0x00;
+    ACK[46] = 0x00;
+    ACK[47] = 0x00;
+    ACK[48] = 0x00;
+    ACK[49] = 0x00;
+    ACK[50] = 0x00;
+    ACK[51] = 0x00;
+    ACK[52] = 0x00;
+    ACK[53] = 0x00;
+    ACK[54] = 0x00;
+    ACK[15] = 0x00;
+    ACK[56] = 0x00;
+    ACK[57] = 0x00;
+    ACK[58] = 0x00;
+    ACK[59] = 0x00;
+    ACK[60] = 0x00;
+    ACK[61] = 0x00;
+    ACK[62] = 0x00;
+    ACK[63]= 0x41;
+    int ret1=serial->write(ACK);
+
+    if(ret1 < 0)
+        {
+            qDebug()<<"send fail!!!";
+        }
+    else
+    qDebug()<<"串口发送成功";
+    m_pTimer2->stop();
+    int w = ui->label_play->width();
+    int h = ui->label_play->height();
+//    qDebug("mode 1 label_w:%d", w);
+//    qDebug("mode 1 label_d:%d", h);
+    ui->label_play->changesize(w, h);
+
+}
+
+void Widget::on_pushButton_8_clicked()
+{
+    if(ui->pushButton_8->text() == "打开串口")
+    {
+         UartInit();
+         ui->pushButton_8->setText("关闭串口");
+    }
+    else if(ui->pushButton_8->text() =="关闭串口")
+    {
+        serial->close();
+        ui->pushButton_8->setText("打开串口");
     }
 }

@@ -121,22 +121,30 @@ void ShowLabel::mouseReleaseEvent(QMouseEvent *event)
     if(event->button() == Qt::RightButton)
     {
         int x1,x2,y1,y2;
-        if(xgxg == 1)
+        switch (xgxg)
         {
-             x1 = src_x * 1920 / this->width();
-             y1 = src_y * 1080 / this->height();
-             x2 = dst_x * 1920 / this->width();
-             y2 = dst_y * 1080 / this->height();
+            case 0:
+                x1 = src_x * 720 / this->width();
+                y1 = src_y * 576 / this->height();
+                x2 = dst_x * 720 / this->width();
+                y2 = dst_y * 576 / this->height();
+                break;
+            case 1:
+                x1 = src_x * 1920 / this->width();
+                y1 = src_y * 1080 / this->height();
+                x2 = dst_x * 1920 / this->width();
+                y2 = dst_y * 1080 / this->height();
+                break;
+            case 2:
+                x1 = src_x * 960 / this->width();
+                y1 = src_y * 544 / this->height();
+                x2 = dst_x * 960 / this->width();
+                y2 = dst_y * 544 / this->height();
+                break;
+            default:
+                break;
         }
-        else
-        {
-             x1 = src_x * 720 / this->width();
-             y1 = src_y * 576 / this->height();
-             x2 = dst_x * 720 / this->width();
-             y2 = dst_y * 576 / this->height();
-        }
-
-        qDebug("x1:%d y1:%d x2:%d y2:%d", x1,y1,x2,y2);
+//        qDebug("x1:%d y1:%d x2:%d y2:%d", x1,y1,x2,y2);
         emit Point(x1, y1, x2, y2);
     }
 }
