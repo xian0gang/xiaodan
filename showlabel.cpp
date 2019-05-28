@@ -27,7 +27,7 @@ ShowLabel::ShowLabel(QWidget *parent) : QLabel(parent)
     this->setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(0, 0, 0);");
 
     connect(&T1,SIGNAL(getImg(QImage)),this,SLOT(ShowVideo(QImage)));
-    connect(&T1,SIGNAL(timeout()),this,SLOT(TimeOut()));
+    connect(&R1,SIGNAL(timeout()),this,SLOT(TimeOut()));
     connect(&T1,SIGNAL(restart()),this,SLOT(ReStart()));
     connect(&T1,SIGNAL(set_w_h(int,int)),this,SLOT(SetSize(int,int)));
     connect(&T1,SIGNAL(th_quit()),this,SLOT(t_qiut()));
@@ -55,8 +55,9 @@ int ShowLabel::TimeOut()
     this->setText("超时，请重试......");
 }
 
-void ShowLabel::paintEvent(QPaintEvent *)
+void ShowLabel::paintEvent(QPaintEvent *event)
 {
+    QLabel::paintEvent(event);
     QPainter painter(this);
 
     // 反走样
@@ -140,11 +141,21 @@ void ShowLabel::mouseReleaseEvent(QMouseEvent *event)
                 y1 = src_y * 544 / this->height();
                 x2 = dst_x * 960 / this->width();
                 y2 = dst_y * 544 / this->height();
+                if((544 - (y1 + y2)/2 < 64) ||
+                   (960 - (x1 + x2)/2 < 64) ||
+                   ((y1 + y2)/2 < 64) ||
+                   ((x1 + x2)/2 < 64))
+                {
+                    qDebug("请选择中心区域的目标");
+                    return;
+                }
                 break;
             default:
                 break;
         }
-//        qDebug("x1:%d y1:%d x2:%d y2:%d", x1,y1,x2,y2);
+        qDebug("x1:%d y1:%d x2:%d y2:%d", x1,y1,x2,y2);
+        qDebug("x:%d y:%d", (x1 + x2)/2,(y1 + y2) / 2);
+
         emit Point(x1, y1, x2, y2);
     }
 }

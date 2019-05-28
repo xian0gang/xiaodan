@@ -51,7 +51,7 @@ QTextBrowser {
     background: rgb(173, 202, 232);
 }
 
-QLabel#state_lab,QLabel#label_port,QLabel#label_ip {
+QLabel#state_lab,QLabel#label_port,QLabel#label_ip,QLabel#label_statues {
     background: rgb(202, 211, 222);
 }
 

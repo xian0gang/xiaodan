@@ -101,6 +101,7 @@ public:
     QPushButton *light_add_btn;
     QPushButton *light_jian_btn;
     QSpacerItem *verticalSpacer_3;
+    QLabel *label_statues;
     QWidget *page_set;
     QGridLayout *gridLayout_5;
     QGroupBox *groupBox;
@@ -322,6 +323,9 @@ public:
         label_play = new ShowLabel(page);
         label_play->setObjectName(QStringLiteral("label_play"));
         label_play->setMinimumSize(QSize(720, 576));
+        QFont font;
+        font.setPointSize(18);
+        label_play->setFont(font);
         label_play->setStyleSheet(QStringLiteral("border-color: rgb(255, 255, 255);"));
         label_play->setAlignment(Qt::AlignCenter);
 
@@ -380,6 +384,7 @@ public:
         state_lab = new QLabel(page);
         state_lab->setObjectName(QStringLiteral("state_lab"));
         state_lab->setMaximumSize(QSize(16777215, 35));
+        state_lab->setStyleSheet(QStringLiteral("color: rgb(0, 85, 255);"));
 
         verticalLayout_3->addWidget(state_lab);
 
@@ -526,6 +531,17 @@ public:
         verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_3->addItem(verticalSpacer_3);
+
+        label_statues = new QLabel(page);
+        label_statues->setObjectName(QStringLiteral("label_statues"));
+        label_statues->setMaximumSize(QSize(16777215, 55));
+        QFont font1;
+        font1.setPointSize(11);
+        label_statues->setFont(font1);
+        label_statues->setStyleSheet(QStringLiteral("color: rgb(255, 0, 127);"));
+        label_statues->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_3->addWidget(label_statues);
 
         verticalLayout_3->setStretch(0, 1);
         verticalLayout_3->setStretch(2, 6);
@@ -924,9 +940,9 @@ public:
         suoding_btn->setText(QApplication::translate("Widget", "\351\224\201\345\256\232", 0));
         left_btn_2->setText(QApplication::translate("Widget", "left", 0));
         up_btn->setText(QApplication::translate("Widget", "up", 0));
-        track_btn1->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2251", 0));
-        track_btn2->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2252", 0));
-        track_btn3->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2253", 0));
+        track_btn1->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2251-CanShift", 0));
+        track_btn2->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2252-TLD", 0));
+        track_btn3->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2253-NCC", 0));
         pushButton_6->setText(QApplication::translate("Widget", "\345\217\257\350\247\201\345\205\211", 0));
         pushButton_7->setText(QApplication::translate("Widget", "\347\272\242\345\244\226", 0));
         groupBox_3->setTitle(QApplication::translate("Widget", "\346\255\245\351\225\277", 0));
@@ -939,6 +955,7 @@ public:
         save_btn->setText(QApplication::translate("Widget", "\345\274\200\345\247\213\344\277\235\345\255\230", 0));
         light_add_btn->setText(QApplication::translate("Widget", "\344\272\256\345\272\246\345\242\236\345\274\272", 0));
         light_jian_btn->setText(QApplication::translate("Widget", "\344\272\256\345\272\246\345\207\217\345\274\261", 0));
+        label_statues->setText(QString());
         groupBox->setTitle(QApplication::translate("Widget", "\345\217\202\346\225\260\350\256\276\347\275\256", 0));
         label_ip->setText(QApplication::translate("Widget", "IP:", 0));
         label_port->setText(QApplication::translate("Widget", "PORT:", 0));
@@ -975,24 +992,6 @@ public:
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\345\260\217\345\274\271\345\272\224\347\224\250\350\275\257\344\273\266</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\345\212\237\350\203\275\357\274\232</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1\357\274\232\347\272\242\345\244\226\350\247\206\351\242\221\350\247\243\347\240\201\345\271\266\346\230\276\347\244\272</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-ri"
-                        "ght:0px; -qt-block-indent:0; text-indent:0px;\">2\357\274\232\347\272\242\345\244\226\350\247\206\351\242\221\344\277\235\345\255\230</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3\357\274\232\347\233\256\346\240\207\346\241\206\347\247\273\345\212\250</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">4\357\274\232\347\233\256\346\240\207\351\224\201\345\256\232</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">5\357\274\232\346\215\242\350\202\244\345\212\237\350\203\275</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">6\357\274\232</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p"
-                        ">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\345\276\205\347\273\255\302\267\302\267\302\267</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\350\275\257\344\273\266\345\210\266\344\275\234\344\272\272\357\274\232xiangang</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\350\201\224\347\263\273\346\226\271\345\274\217\357\274\232785213156@qq.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\350\275\257\344\273\266\347\211\210\346\234\254\357\274\232v1.0</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin"
-                        "-right:0px; -qt-block-indent:0; text-indent:0px;\">\345\205\254\345\217\270\357\274\232\351\225\277\346\262\231\345\270\202\350\213\261\350\277\210\351\224\220\345\255\232\346\231\272\350\203\275\346\212\200\346\234\257\346\234\211\351\231\220\345\205\254\345\217\270</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", 0));
     } // retranslateUi

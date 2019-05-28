@@ -29,6 +29,7 @@ public:
 
 signals:
     void readth_quit();
+    void timeout();
 
 public slots:
 protected:

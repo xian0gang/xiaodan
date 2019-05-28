@@ -249,7 +249,7 @@ qDebug("解码线程进入");
             }
 
             now_w = pFormatCtx->streams[videoindex]->codec->width;
-            qDebug()<<"wwwwwwwww:"<<now_w;
+//            qDebug()<<"wwwwwwwww:"<<now_w;
 //            qDebug()<<"hhhhhhhhh:"<<pFormatCtx->streams[0]->codec->height;
 
             //画框判断分辨率标志

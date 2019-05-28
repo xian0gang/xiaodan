@@ -58,7 +58,7 @@ void Readthread::run()
         readstart = 0;
         while_quit = 0;
         emit readth_quit();
-//        emit timeout();
+        emit timeout();
         return;
     }
 

@@ -54,11 +54,6 @@ Widget::Widget(QWidget *parent) :
         qDebug()<<"新建目录成功";
     }
 
-//    tcp初始化
-    TcpInit();
-    connect(ui->label_play,SIGNAL(thread_quit()),this, SLOT(th_quit()));
-
-    connect(ui->label_play, SIGNAL(Point(int,int,int,int)), this, SLOT(sendPoint(int,int,int,int)));
 
 
     //读取串口信息
@@ -82,7 +77,12 @@ Widget::Widget(QWidget *parent) :
         }
 
         on_pushButton_8_clicked();
-//        ui->track_btn2->setEnabled(false);
+
+        //    tcp初始化
+            TcpInit();
+            connect(ui->label_play,SIGNAL(thread_quit()),this, SLOT(th_quit()));
+
+            connect(ui->label_play, SIGNAL(Point(int,int,int,int)), this, SLOT(sendPoint(int,int,int,int)));
 
 }
 
@@ -102,10 +102,19 @@ void Widget::NewConnect()
 {
     qDebug()<<"new connect";
     ui->state_lab->setText("新客户端连接成功");
- socket = server->nextPendingConnection();
 
- connect(socket, SIGNAL(readyRead()), this, SLOT(socket_Read_Data()));
- connect(socket, SIGNAL(disconnected()), this, SLOT(Tcpclose()));
+    socket = server->nextPendingConnection();
+
+    //切换为 可见光
+    on_pushButton_6_clicked();
+
+    //当有连接是就开始采集视频
+    play_stop = 1;
+    on_play_btn_clicked();
+
+
+    connect(socket, SIGNAL(readyRead()), this, SLOT(socket_Read_Data()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(Tcpclose()));
 
 }
 
@@ -113,6 +122,9 @@ void Widget::Tcpclose()
 {
     ui->state_lab->setText("新客户端断开");
     socket->deleteLater();
+    //连接断开时 停止视频采集
+    play_stop = 0;
+    on_play_btn_clicked();
 
 }
 
@@ -1020,33 +1032,8 @@ void Widget::sendPoint(int x1, int y1, int x2, int y2)
     }
 }
 
-
+//qsimage 0x03
 void Widget::on_track_btn1_clicked()
-{
-    unsigned char data[100] = { 0 };
-
-    POT.head = 0x68;
-    POT.target = 0x01;
-    POT.head2 = 0x68;
-    POT.ctr = 0x02;
-    POT.x1 = 0;
-    POT.y1 = 0;
-    POT.x2 = 0;
-    POT.y2 = 0;
-    POT.chk = 0;
-    POT.end = 0x16;
-    int len = sizeof(POINTDATA);
-    memcpy(/*(void*)*/data, &POT, len);
-
-    int ret = socket->write((const char*)data,14);
-
-    if(ret < 0)
-    {
-        qDebug()<<"send fail!!!";
-    }
-}
-
-void Widget::on_track_btn2_clicked()
 {
     unsigned char data[100] = { 0 };
 
@@ -1069,9 +1056,14 @@ void Widget::on_track_btn2_clicked()
     {
         qDebug()<<"send fail!!!";
     }
+    else
+    {
+        ui->label_statues->setText("已切换为CamShift跟踪");
+    }
 }
 
-void Widget::on_track_btn3_clicked()
+//tld 0x04
+void Widget::on_track_btn2_clicked()
 {
     unsigned char data[100] = { 0 };
 
@@ -1093,6 +1085,42 @@ void Widget::on_track_btn3_clicked()
     if(ret < 0)
     {
         qDebug()<<"send fail!!!";
+    }
+    else
+    {
+        ui->label_statues->setText("已切换为TLD跟踪");
+    }
+}
+
+
+
+//ncc 0x02
+void Widget::on_track_btn3_clicked()
+{
+    unsigned char data[100] = { 0 };
+
+    POT.head = 0x68;
+    POT.target = 0x01;
+    POT.head2 = 0x68;
+    POT.ctr = 0x02;
+    POT.x1 = 0;
+    POT.y1 = 0;
+    POT.x2 = 0;
+    POT.y2 = 0;
+    POT.chk = 0;
+    POT.end = 0x16;
+    int len = sizeof(POINTDATA);
+    memcpy(/*(void*)*/data, &POT, len);
+
+    int ret = socket->write((const char*)data,14);
+
+    if(ret < 0)
+    {
+        qDebug()<<"send fail!!!";
+    }
+    else
+    {
+        ui->label_statues->setText("已切换为NCC跟踪");
     }
 }
 
@@ -1190,7 +1218,7 @@ void Widget::on_pushButton_6_clicked()
             qDebug()<<"send fail!!!";
         }
     m_pTimer->start(2000);
-    ui->track_btn2->setEnabled(false);
+//    ui->track_btn2->setEnabled(false);
 
 }
 
@@ -1285,7 +1313,6 @@ void Widget::on_pushButton_7_clicked()
     ACK0[63]= 0x3C;
     serial->write(ACK0);
     m_pTimer2->start(2000);
-     ui->track_btn2->setEnabled(true);
 }
 
 
