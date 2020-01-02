@@ -24,6 +24,7 @@ Widget::Widget(QWidget *parent) :
     Suodin = true;
     StepSize = 5;
     saveff = true;
+    auto_send_count = 0;
 
 
 
@@ -31,6 +32,15 @@ Widget::Widget(QWidget *parent) :
     connect(m_pTimer, SIGNAL(timeout()), this, SLOT(handleTimeout()));
     m_pTimer2 = new QTimer(this);
     connect(m_pTimer2, SIGNAL(timeout()), this, SLOT(handleTimeout2()));
+    m_auto_show_tm = new QTimer(this);
+    connect(m_auto_show_tm, SIGNAL(timeout()), this, SLOT(auto_show()));
+    m_auto_send = new QTimer(this);
+    connect(m_auto_send, SIGNAL(timeout()), this, SLOT(auto_send()));
+
+    m_heartbeat = new QTimer(this);
+    m_lastTime = QDateTime::currentDateTime();
+    connect(m_heartbeat, &QTimer::timeout, this, &Widget::checkHeartbeat);
+
     ui->checkBox_2->setChecked(true);
     ui->checkBox_3->setChecked(false);
     ui->checkBox->setChecked(false);
@@ -97,6 +107,49 @@ void Widget::TcpInit()
 
 }
 
+void Widget::auto_show()
+{
+    play_stop = 1;
+    on_play_btn_clicked();
+
+    m_auto_show_tm->stop();
+}
+
+void Widget::auto_send()
+{
+    QByteArray ba;
+    ba[0] = 0x00;
+    ba[1] = 0x00;
+
+//    socket->write(ba);
+
+}
+
+void Widget::checkHeartbeat()
+{
+    if (m_lastTime.secsTo(QDateTime::currentDateTime()) >= 6)   //超过30s即为掉线,停止心跳
+    {
+        qDebug() << "heartbeat 超时, 即将断开连接";
+        m_auto_send->stop();
+//        auto_send_count = 0;
+        Tcpclose();
+        m_heartbeat->stop();
+//        auto_send_count++;
+    }
+    else
+    {
+        qDebug() << "heartbeat";
+        auto_send_count = 0;
+    }
+
+//    if(auto_send_count >= 2)
+//    {
+//        qDebug("连接断开或者网络故障");
+
+
+//    }
+}
+
 
 void Widget::NewConnect()
 {
@@ -107,11 +160,15 @@ void Widget::NewConnect()
 
     //切换为 可见光
     on_pushButton_6_clicked();
-
+    ui->label_play->clear();
+    ui->label_play->setText("正在自动连接···");
+qDebug("1");
+//    Sleep(3);
+qDebug("2");
     //当有连接是就开始采集视频
-    play_stop = 1;
-    on_play_btn_clicked();
-
+    m_auto_show_tm->start(4000);
+    m_auto_send->start(2000);
+    m_heartbeat->setInterval(6000);
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(socket_Read_Data()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(Tcpclose()));
@@ -121,10 +178,16 @@ void Widget::NewConnect()
 void Widget::Tcpclose()
 {
     ui->state_lab->setText("新客户端断开");
-    socket->deleteLater();
+
+    if(socket->isOpen())
+    {
+        socket->deleteLater();
+    }
     //连接断开时 停止视频采集
     play_stop = 0;
     on_play_btn_clicked();
+    ui->label_play->clear();
+    ui->label_play->setText("网络连接断开···");
 
 }
 
@@ -134,6 +197,11 @@ void Widget::socket_Read_Data()
     buffer = socket->readAll();
     qDebug()<<"len:"<<buffer.length();
     qDebug()<<"read:"<<buffer;
+    if (!m_heartbeat->isActive())
+    {
+        m_heartbeat->start();
+    }
+    m_lastTime = QDateTime::currentDateTime();
 }
 
 //串口 暂时没用
@@ -1222,6 +1290,8 @@ void Widget::on_pushButton_6_clicked()
 
 }
 
+
+//红外视频 跟踪自动切换为ncc
 void Widget::on_pushButton_7_clicked()
 {
     unsigned char data[100] = { 0 };
@@ -1398,6 +1468,8 @@ void Widget::handleTimeout()
 //    qDebug("mode 1 label_w:%d", w);
 //    qDebug("mode 1 label_d:%d", h);
     ui->label_play->changesize(w, h);
+
+    on_track_btn1_clicked();
 }
 
 void Widget::handleTimeout2()
@@ -1481,6 +1553,9 @@ void Widget::handleTimeout2()
 //    qDebug("mode 1 label_w:%d", w);
 //    qDebug("mode 1 label_d:%d", h);
     ui->label_play->changesize(w, h);
+
+    //跟踪切换为ncc
+    on_track_btn3_clicked();
 
 }
 

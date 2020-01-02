@@ -81,12 +81,16 @@ public:
     QPushButton *suoding_btn;
     QPushButton *left_btn_2;
     QPushButton *up_btn;
-    QVBoxLayout *verticalLayout_4;
+    QGroupBox *groupBox_11;
+    QGridLayout *gridLayout_17;
+    QPushButton *pushButton_6;
     QPushButton *track_btn1;
     QPushButton *track_btn2;
-    QPushButton *track_btn3;
-    QPushButton *pushButton_6;
+    QGroupBox *groupBox_12;
+    QGridLayout *gridLayout_18;
     QPushButton *pushButton_7;
+    QPushButton *track_btn3;
+    QVBoxLayout *verticalLayout_4;
     QGroupBox *groupBox_3;
     QGridLayout *gridLayout_10;
     QCheckBox *checkBox;
@@ -433,34 +437,60 @@ public:
 
         verticalLayout_3->addLayout(gridLayout_2);
 
+        groupBox_11 = new QGroupBox(page);
+        groupBox_11->setObjectName(QStringLiteral("groupBox_11"));
+        groupBox_11->setMinimumSize(QSize(0, 35));
+        gridLayout_17 = new QGridLayout(groupBox_11);
+        gridLayout_17->setSpacing(6);
+        gridLayout_17->setContentsMargins(11, 11, 11, 11);
+        gridLayout_17->setObjectName(QStringLiteral("gridLayout_17"));
+        pushButton_6 = new QPushButton(groupBox_11);
+        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
+
+        gridLayout_17->addWidget(pushButton_6, 0, 0, 1, 1);
+
+        track_btn1 = new QPushButton(groupBox_11);
+        track_btn1->setObjectName(QStringLiteral("track_btn1"));
+
+        gridLayout_17->addWidget(track_btn1, 1, 0, 1, 1);
+
+        track_btn2 = new QPushButton(groupBox_11);
+        track_btn2->setObjectName(QStringLiteral("track_btn2"));
+
+        gridLayout_17->addWidget(track_btn2, 2, 0, 1, 1);
+
+        track_btn2->raise();
+        track_btn1->raise();
+        pushButton_6->raise();
+        track_btn2->raise();
+        track_btn1->raise();
+        pushButton_6->raise();
+
+        verticalLayout_3->addWidget(groupBox_11);
+
+        groupBox_12 = new QGroupBox(page);
+        groupBox_12->setObjectName(QStringLiteral("groupBox_12"));
+        groupBox_12->setMinimumSize(QSize(0, 35));
+        gridLayout_18 = new QGridLayout(groupBox_12);
+        gridLayout_18->setSpacing(6);
+        gridLayout_18->setContentsMargins(11, 11, 11, 11);
+        gridLayout_18->setObjectName(QStringLiteral("gridLayout_18"));
+        pushButton_7 = new QPushButton(groupBox_12);
+        pushButton_7->setObjectName(QStringLiteral("pushButton_7"));
+
+        gridLayout_18->addWidget(pushButton_7, 0, 0, 1, 1);
+
+        track_btn3 = new QPushButton(groupBox_12);
+        track_btn3->setObjectName(QStringLiteral("track_btn3"));
+
+        gridLayout_18->addWidget(track_btn3, 1, 0, 1, 1);
+
+
+        verticalLayout_3->addWidget(groupBox_12);
+
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
-        track_btn1 = new QPushButton(page);
-        track_btn1->setObjectName(QStringLiteral("track_btn1"));
-
-        verticalLayout_4->addWidget(track_btn1);
-
-        track_btn2 = new QPushButton(page);
-        track_btn2->setObjectName(QStringLiteral("track_btn2"));
-
-        verticalLayout_4->addWidget(track_btn2);
-
-        track_btn3 = new QPushButton(page);
-        track_btn3->setObjectName(QStringLiteral("track_btn3"));
-
-        verticalLayout_4->addWidget(track_btn3);
-
-        pushButton_6 = new QPushButton(page);
-        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
-
-        verticalLayout_4->addWidget(pushButton_6);
-
-        pushButton_7 = new QPushButton(page);
-        pushButton_7->setObjectName(QStringLiteral("pushButton_7"));
-
-        verticalLayout_4->addWidget(pushButton_7);
-
 
         verticalLayout_3->addLayout(verticalLayout_4);
 
@@ -545,7 +575,7 @@ public:
 
         verticalLayout_3->setStretch(0, 1);
         verticalLayout_3->setStretch(2, 6);
-        verticalLayout_3->setStretch(7, 4);
+        verticalLayout_3->setStretch(9, 4);
 
         gridLayout_8->addLayout(verticalLayout_3, 0, 1, 1, 1);
 
@@ -940,11 +970,13 @@ public:
         suoding_btn->setText(QApplication::translate("Widget", "\351\224\201\345\256\232", 0));
         left_btn_2->setText(QApplication::translate("Widget", "left", 0));
         up_btn->setText(QApplication::translate("Widget", "up", 0));
-        track_btn1->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2251-CanShift", 0));
-        track_btn2->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2252-TLD", 0));
-        track_btn3->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2253-NCC", 0));
+        groupBox_11->setTitle(QApplication::translate("Widget", "\345\217\257\350\247\201\345\205\211", 0));
         pushButton_6->setText(QApplication::translate("Widget", "\345\217\257\350\247\201\345\205\211", 0));
+        track_btn1->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2251", 0));
+        track_btn2->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\2252", 0));
+        groupBox_12->setTitle(QApplication::translate("Widget", "\347\272\242\345\244\226", 0));
         pushButton_7->setText(QApplication::translate("Widget", "\347\272\242\345\244\226", 0));
+        track_btn3->setText(QApplication::translate("Widget", "\350\267\237\350\270\252\347\256\227\346\263\225", 0));
         groupBox_3->setTitle(QApplication::translate("Widget", "\346\255\245\351\225\277", 0));
         checkBox->setText(QApplication::translate("Widget", "1", 0));
         checkBox_2->setText(QApplication::translate("Widget", "5", 0));

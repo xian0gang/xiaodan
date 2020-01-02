@@ -142,7 +142,7 @@ qDebug("解码线程进入");
             //退出标志
             if(stoppedd)
             {
-                qDebug("解码线程退出");
+//                qDebug("解码线程退出");
                 break;
             }
 

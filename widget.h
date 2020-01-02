@@ -8,6 +8,7 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QMessageBox>
+#include <QDateTime>
 
 typedef struct {
     unsigned char head;
@@ -112,6 +113,10 @@ private slots:
 
     void on_pushButton_8_clicked();
 
+    void auto_show();
+    void auto_send();
+    void checkHeartbeat();
+
 private:
     Ui::Widget *ui;
     void ui_init();      //ui初始化
@@ -154,6 +159,12 @@ private:
 
     QTimer *m_pTimer;
     QTimer *m_pTimer2;
+    QTimer *m_auto_show_tm;
+    QTimer *m_auto_send;
+    QTimer *m_heartbeat;
+
+    int auto_send_count;
+    QDateTime m_lastTime;
 
 };
 
